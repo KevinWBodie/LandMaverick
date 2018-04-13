@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>dc.js - Land Maverick Data Viewer</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/dc.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/landmaverick.css"/>
+    <style>
+      .heat-box {
+        stroke: #E6E6E6;
+        stroke-width: 2px;
+      }
+    </style>
+</head>
+<body>
+<div class="container">
+
+
+
+<img src="LandMaverickLogo.png">
+
+<br>
+<h4> Land Maverick automatically collects data for moisture, ph, and temperature</h4>
+<h4> Heatmaps below display the data for easy and accurate treatment determination</h4>
+<br>
+
+
+<h2>Moisture Readings</h2>
+
+<! The id below will determine which heatmap is drawn test uses the first heatmap which uses the shortened file morley.csv  >
+<! while mavericktest uses the original morley file now called morleysave.csv. NOTE: the shortened file maintains the original filename.>
+<! Defining both ids will display both heatmaps>
+
+<! Heatmaps to display are below>
+<div id="mavericktest"></div>   
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<h2>PH Readings</h2>
+<div id="maverickphtest"></div>  
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<h2>Temperature Readings</h2>
+<div id="mavericktemperaturetest"></div> 
+<! <div id="maverickoffsettest"></div> 
+<! <div id="test"></div>         
+
+
+
+
+<script type="text/javascript" src="../js/d3.js"></script>
+<script type="text/javascript" src="../js/crossfilter.js"></script>
+<script type="text/javascript" src="../js/dc.js"></script>
+<script type="text/javascript">
+
+var chart = dc.heatMap("#test");
+var maverickchart = dc.heatMap("#mavericktest");
+var maverickphchart = dc.heatMap("#maverickphtest");
+var maverickoffsetchart = dc.heatMap("#maverickoffsettest");
+var mavericktemperaturechart = dc.heatMap("#mavericktemperaturetest");
+
+// Code below will read in the data from the Land Maverick - format is .csv
+d3.csv("LandMaverickData.csv", function(LandMaverickData){
+    LandMaverickData.forEach(function(d)
+    {
+        d.X_Latitude = +d.X_Latitude;
+        d.Y_Longitude = +d.Y_Longitude;
+        d.Moisture = +d.Moisture;
+        d.pH = +d.pH;
+        d.Temperature = +d.Temperature;
+        console.log("Land Maverick Data: ");
+        console.log(d);
+    });
+    var ncf = crossfilter(LandMaverickData);
+    var tempDimension = ncf.dimension(function(d) {return d.Temperature;});
+    var phDimension = ncf.dimension(function(d) {return d.pH;});
+    var moistureDimension = ncf.dimension(function(d) {return d.Moisture;});
+    console.log(tempDimension.top(5));
+    console.log(phDimension.top(4));
+    console.log(moistureDimension.top(3));
+    console.log(tempDimension.bottom(5));
+    console.log(phDimension.bottom(4));
+    console.log(moistureDimension.bottom(3));
+});
+
+
+
+d3.csv("morley.csv", function(error, experiments) {
+
+console.log(experiments);
+  var ndx    = crossfilter(experiments),
+      runDim = ndx.dimension(function(d) { return [+d.Run, +d.Expt]; }),
+      runGroup = runDim.group().reduceSum(function(d) { return +d.Speed; });
+
+console.log("Morley runDim: ");
+console.log(runDim.bottom(8));
+console.log("Payments equal to 980");
+console.log(runDim.filter(null));
+
+console.log("Morley runGroup: ");
+console.log(runGroup.top(6));
+
+var runDimension = ndx.dimension(function(d) {return d.Run;});
+console.log(runDimension.top(3));
+
+
+  //  console.log(d.key[1]);
+  //  console.log(d.value);
+  chart
+    .width(45 * 20 + 80)
+    .height(45 * 5 + 40)
+    .dimension(runDim)
+    .group(runGroup)
+    .keyAccessor(function(d) {
+       // console.log("chart value");
+       // console.log(d.key[0]);
+        return +d.key[0]; })
+    .valueAccessor(function(d) { return +d.key[1]; })
+    .colorAccessor(function(d) { return +d.value; })
+    .title(function(d) {
+        return "Run:   " + d.key[0] + "\n" +
+               "Expt:  " + d.key[1] + "\n" +
+               "Speed: " + (299000 + d.value) + " km/s";})
+    .colors(["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"])
+    .calculateColorDomain();
+
+  chart.render();
+});
+
+// ******************DISPLAY OF MOISTURE IN HEATMAP ***************************
+// d3.csv("morleysave.csv", function(error, experiments) {
+
+d3.csv("LandMaverickData.csv", function(error, experiments) {
+
+// console.log(experiments);
+  var ndx    = crossfilter(experiments),
+      // runDim = ndx.dimension(function(d) { return [+d.Run, +d.Expt]; }),
+      // runGroup = runDim.group().reduceSum(function(d) { return +d.Speed; });
+
+      runDim = ndx.dimension(function(d) { return [+d.X_Latitude, +d.Y_Longitude]; }),
+      runGroup = runDim.group().reduceSum(function(d) { return +d.Moisture; });
+
+console.log("LandMaverick runDim: ");
+console.log(runDim.bottom(8));
+
+
+console.log("LandMaverick runGroup: ");
+console.log(runGroup.top(6));
+
+  maverickchart
+    .width(45 * 10 + 80)
+    .height(45 * 10 + 40)
+    .dimension(runDim)
+    .group(runGroup)
+    .keyAccessor(function(d) { return +d.key[0]; })
+    .valueAccessor(function(d) { return +d.key[1]; })
+    .colorAccessor(function(d) { return +d.value; })
+    .title(function(d) {
+        return "X-Latutude:   " + d.key[0] + "\n" +
+               "Y-Longitude:  " + d.key[1] + "\n" +
+               "Moisture: " + d.value + "\n";})
+   // .colors(["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"])
+    .calculateColorDomain();
+
+    
+    maverickchart.render();
+  });
+
+</script>
+
+<script type="text/javascript">
+// ******************DISPLAY OF PH IN HEATMAP ***************************
+    d3.csv("LandMaverickData.csv", function(error, experiments) {
+
+// console.log(experiments);
+  var ndx    = crossfilter(experiments),
+      // runDim = ndx.dimension(function(d) { return [+d.Run, +d.Expt]; }),
+      // runGroup = runDim.group().reduceSum(function(d) { return +d.Speed; });
+
+      runDim = ndx.dimension(function(d) { return [+d.X_Latitude, +d.Y_Longitude]; }),
+      runGroup = runDim.group().reduceSum(function(d) { return +d.pH; });
+
+console.log("LandMaverick runDim: ");
+console.log(runDim.bottom(8));
+
+
+console.log("LandMaverick runGroup: ");
+console.log(runGroup.top(6));
+
+  maverickphchart
+    .width(45 * 10 + 80)
+    .height(45 * 10 + 40)
+    .dimension(runDim)
+    .group(runGroup)
+    .keyAccessor(function(d) { return +d.key[0]; })
+    .valueAccessor(function(d) { return +d.key[1]; })
+    .colorAccessor(function(d) { return +d.value; })
+    .title(function(d) {
+        return "X-Latutude:   " + d.key[0] + "\n" +
+               "Y-Longitude:  " + d.key[1] + "\n" +
+               "PH: " + d.value + "\n";})
+   // .colors(["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"])
+    .calculateColorDomain();
+
+  maverickphchart.render();
+});
+
+// ******************DISPLAY OF TEMPERATURE IN HEATMAP ***************************
+d3.csv("LandMaverickData.csv", function(error, experiments) {
+
+
+var ndx    = crossfilter(experiments),
+    
+    runDim = ndx.dimension(function(d) { return [+d.X_Latitude, +d.Y_Longitude]; }),
+    runGroup = runDim.group().reduceSum(function(d) { return +d.Temperature; });
+
+console.log("LandMaverick runDim: ");
+console.log(runDim.bottom(8));
+
+
+console.log("LandMaverick runGroup: ");
+console.log(runGroup.top(6));
+
+mavericktemperaturechart
+  .width(45 * 10 + 80)
+  .height(45 * 10 + 40)
+  .dimension(runDim)
+  .group(runGroup)
+  .keyAccessor(function(d) { return +d.key[0]; })
+  .valueAccessor(function(d) { return +d.key[1]; })
+  .colorAccessor(function(d) { return +d.value; })
+  .title(function(d) {
+    return "X-Latutude:   " + d.key[0] + "\n" +
+               "Y-Longitude:  " + d.key[1] + "\n" +
+               "Temperature: " + d.value + "\n";})
+ // .colors(["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"])
+  .calculateColorDomain();
+
+mavericktemperaturechart.render();
+
+});
+
+// ******************DISPLAY OF OFFSET IN HEATMAP ***************************
+d3.csv("LandMaverickData.csv", function(error, experiments) {
+
+
+  var ndx    = crossfilter(experiments),
+      
+      runDim = ndx.dimension(function(d) { return [+d.X_Latitude, +d.Y_Longitude]; }),
+      runGroup = runDim.group().reduceSum(function(d) { return +d.Offset; });
+
+console.log("LandMaverick runDim: ");
+console.log(runDim.bottom(8));
+
+
+console.log("LandMaverick runGroup: ");
+console.log(runGroup.top(6));
+
+  maverickoffsetchart
+    .width(45 * 10 + 80)
+    .height(45 * 10 + 40)
+    .dimension(runDim)
+    .group(runGroup)
+    .keyAccessor(function(d) { return +d.key[0]; })
+    .valueAccessor(function(d) { return +d.key[1]; })
+    .colorAccessor(function(d) { return +d.value; })
+    .title(function(d) {
+        return "Run:   " + d.key[0] + "\n" +
+               "Expt:  " + d.key[1] + "\n" +
+               "Speed: " + (299000 + d.value) + " km/s";})
+   // .colors(["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"])
+    .calculateColorDomain();
+
+  maverickoffsetchart.render();
+
+});
+
+
+</script>
+
+</div>
+</body>
+</html>
