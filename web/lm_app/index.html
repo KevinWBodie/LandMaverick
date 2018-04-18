@@ -11,6 +11,10 @@
         stroke: #E6E6E6;
         stroke-width: 2px;
       }
+      #map {
+        height: 300px;
+        width: 80%;
+       }
     </style>
 </head>
 <body>
@@ -19,13 +23,61 @@
 
 
 <img src="LandMaverickLogo.png">
+<br>
+<br>
+<div id="map"></div>
+
+<script>
+    function initMap() {
+      var uluru = {lat: 41.1593, lng: -73.2571};
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 4,
+        center: uluru
+      });
+      var marker = new google.maps.Marker({
+        position: uluru,
+        map: map
+      });
+    }
+  </script>
+  <script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0-ULiD9oO9DGES3Bz9SkXn9z65QZ-Nrg&callback=initMap">
+  </script>
 
 <br>
 <h4> Land Maverick automatically collects data for moisture, ph, and temperature</h4>
 <h4> Heatmaps below display the data for easy and accurate treatment determination</h4>
 <br>
 
+<button onclick="readFile()">Load File</button>
 
+
+<script type="text/javascript">
+// function readFile(){
+//  var fileSelector = document.createElement('input');
+//  fileSelector.setAttribute('type', 'file');
+
+//  var selectDialogueLink = document.createElement('a');
+//  selectDialogueLink.setAttribute('href', '');
+//  selectDialogueLink.innerText = "Select File";
+//}
+</script>
+
+<script type="text/javascript">
+var fileSelector = document.createElement('input');
+fileSelector.setAttribute('type', 'file');
+
+var selectDialogueLink = document.createElement('a');
+selectDialogueLink.setAttribute('href', '');
+selectDialogueLink.innerText = "Select File";
+
+selectDialogueLink.onclick = function () {
+     fileSelector.click();
+     return false;
+}
+
+document.body.appendChild(selectDialogueLink);
+</script>
 <h2>Moisture Readings</h2>
 
 <! The id below will determine which heatmap is drawn test uses the first heatmap which uses the shortened file morley.csv  >
@@ -208,7 +260,8 @@ console.log(runGroup.top(6));
         return "X-Latutude:   " + d.key[0] + "\n" +
                "Y-Longitude:  " + d.key[1] + "\n" +
                "Moisture: " + d.value + "\n";})
-   // .colors(["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"])
+   //.colors(["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"])
+    .colors(["#f4f817","#31a354","#de2d26"])
     .calculateColorDomain();
 
     
@@ -249,6 +302,7 @@ console.log(runGroup.top(6));
                "Y-Longitude:  " + d.key[1] + "\n" +
                "PH: " + d.value + "\n";})
    // .colors(["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"])
+    .colors(["#f4f817","#31a354","#de2d26"])
     .calculateColorDomain();
 
   maverickphchart.render();
@@ -283,6 +337,7 @@ mavericktemperaturechart
                "Y-Longitude:  " + d.key[1] + "\n" +
                "Temperature: " + d.value + "\n";})
  // .colors(["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"])
+  .colors(["#f4f817","#31a354","#de2d26"])
   .calculateColorDomain();
 
 mavericktemperaturechart.render();
