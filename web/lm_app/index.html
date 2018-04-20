@@ -23,7 +23,6 @@
 <div class="container">
 
 
-
 <img src="LandMaverickLogo.png">
 <br>
 <br>
@@ -53,7 +52,7 @@
 
 <! Create a button on the page to sleect some number of files>
 <input type="file" id="fileElem" style="display:none" onchange="handleFiles(this.files)">
-<button id="fileSelect">Select files</button>
+<button id="fileSelect">Select file</button>
 
 <! Javascript to handle the selecting of the file>
 <script type="text/javascript">
@@ -187,71 +186,18 @@ mavericktemperaturechart.render();
 
 
 
-<h2>Moisture Readings</h2>
+<h3> &nbsp &nbsp Moisture Readings   &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp    PH Readings &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Temperature Readings</h3>
 
 <! The id below will determine which heatmap is drawn test uses the first heatmap which uses the shortened file morley.csv  >
 <! while mavericktest uses the original morley file now called morleysave.csv. NOTE: the shortened file maintains the original filename.>
 <! Defining both ids will display both heatmaps>
 
 <! Heatmaps to display are below>
-<div id="mavericktest"></div>   
+<div id="mavericktest" style="width:300px; height:300px;"></div>   
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+<div id="maverickphtest" style="width:300px; height:300px;"></div>
 
-<h2>PH Readings</h2>
-<div id="maverickphtest"></div>
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<h2>Temperature Readings</h2>
-<div id="mavericktemperaturetest"></div> 
+<div id="mavericktemperaturetest" style="width:300px; height:300px;"></div> 
 <! <div id="maverickoffsettest"></div> 
 <! <div id="test"></div>         
 
@@ -263,10 +209,8 @@ mavericktemperaturechart.render();
 <script type="text/javascript" src="../js/dc.js"></script>
 <script type="text/javascript">
 
-var chart = dc.heatMap("#test");
 var maverickchart = dc.heatMap("#mavericktest");
 var maverickphchart = dc.heatMap("#maverickphtest");
-var maverickoffsetchart = dc.heatMap("#maverickoffsettest");
 var mavericktemperaturechart = dc.heatMap("#mavericktemperaturetest");
 
 </script>
