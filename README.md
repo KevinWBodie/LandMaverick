@@ -1,5 +1,6 @@
 Starting apache server on MacOS
 From console command line: sudo apachectl
+
 User will be prompted for MacOs user password in order to run the <sudo> command
 
 Running from a localhost environment using Apache
