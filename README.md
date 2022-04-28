@@ -1,3 +1,14 @@
+Starting apache server on MacOS
+From console command line: sudo apachectl
+User will be prompted for MacOs user password in order to run the <sudo> command
+
+Running from a localhost environment using Apache
+http://localhost/~kevinbodie/LandMaverick/web/lm_app/
+
+
+
+
+
 # LandMaverick
 
 Javascript application to read in data from a .csv file and generate a series of Heatmaps. This program is used in conjunction with a robot that provides the data to drive the display.
