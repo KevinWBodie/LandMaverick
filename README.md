@@ -5,6 +5,9 @@ User will be prompted for MacOs user password in order to run the <sudo> command
 
 Running from a localhost environment using Apache
 http://localhost/~kevinbodie/LandMaverick/web/lm_app/
+  
+  runnning from http://localhost/<username>
+  This will provide the ability to navigate to any of the <Sites> that are configured on the server.
 
 
 
